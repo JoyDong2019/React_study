@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script src="../build/react.development.js"></script>
+    <script src="../build/react-dom.development.js"></script>
+    <script src="../build/babel.min.js"></script>
+  </head>
+  <body>
+    <script type="text/babel">
+      const name = "Josh Perez";
+      const element = <h1>hello,{name}</h1>;
+      /* 大括号内可以放置任何有效的JavaScript表达式 */
+      ReactDOM.render(element, document.getElementById("root"));
+    </script>
+
+    <script type="text/babel">
+      function formatName(user) {
+        return user.firstName + " " + user.lastName;
+      }
+      const user = {
+        firstName: "Harper",
+        lastName: "Perez",
+      };
+      function getGreeting(user) {
+        if (user) {
+          return <h1>Hello,{formatName(user)}!</h1>;
+          /* JSX也是一个表达式 */
+        } else {
+          return <h1>hello,Stranger</h1>;
+        }
+      }
+      const element = <h1>Hello, {formatName(user)}!</h1>;
+      ReactDOM.render(element, document.getElementById("root"));
+    </script>
+    <!-- JSX表示对象 -->
+    <script type="text/babel">
+      const element = <h1 className="greeting">Hello,world!</h1>;
+      /* 等价于 */
+      const element = React.createElement(
+        "h1",
+        { className: "greeting" },
+        "hello,world"
+      );
+      /* babel会把JSX转译成一个名为React.createElement()函数调用 */
+    </script>
+  </body>
+</html>
