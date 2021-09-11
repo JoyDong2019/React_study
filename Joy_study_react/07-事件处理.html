@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- <script type="text/babel">
+      function ActionLink() {
+        function handleClick(e) {
+          /* 不能通过false的方式阻止默认行为，必须显式使用preventDefault */
+          e.preventDefault();
+          console.log("The link was clicked.");
+        }
+        return (
+          <a href="#" onClick={handleClick}>
+            Click me
+          </a>
+        );
+      }
+    </script> -->
+    <script type="text/babel">
+      class Toggle extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { isToggleOn: true };
+
+          // 为了在回调中使用 `this`，这个绑定是必不可少的
+          /* class方法不会默认绑定this 若忘记绑定 当调用这个函数时 this的值为undefined */
+          this.handleClick = this.handleClick.bind(this);
+          /* 若不使用bind绑定this，可以有两种方式解决 */
+          /* handleClick = () => {
+            console.log("this is:", this);
+          }; 
+          这是实验语法
+          */
+        }
+        handleClick() {
+          this.setState((state) => ({
+            isToggleOn: !state.isToggleOn,
+          }));
+        }
+        render() {
+          return (
+            <button onClick={this.handleClick}>
+              {this.state.isToggleOn ? "ON" : "OFF"}
+            </button>
+            /* 绑定this另一种方法：在回调中使用箭头函数
+            缺点：此语法问题在于每次渲染 LoggingButton 时都会创建不同的回调函数。在大多数情况下，这没什么问题，但如果该回调函数作为 prop 传入子组件时，这些组件可能会进行额外的重新渲染。
+            应避免使用。
+            <button onClick={()=>this.handleClick()}>
+             */
+          );
+          /* 通常情况下 如果没有在方法后面添加（） 如onClick={this.handleClick} 应该为这个方法绑定this*/
+        }
+      }
+      ReactDOM.render(<Toggle />, document.getElementById("root"));
+    </script>
+  </body>
+</html>

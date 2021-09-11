@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      import React, { Suspense } from "react";
+
+      const OtherComponent = React.lazy(() => import("./OtherComponent"));
+      const AnotherComponent = React.lazy(() => import("./AnotherComponent"));
+
+      function MyComponent() {
+        return (
+          <div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <section>
+                <OtherComponent />
+                <AnotherComponent />
+              </section>
+            </Suspense>
+          </div>
+        );
+      }
+    </script>
+  </body>
+</html>

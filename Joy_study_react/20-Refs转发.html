@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      /* Ref转发是一项将ref自动通过组件传递到其一子组件的技巧 */
+      /* ref只在使用React.forwardRef定义组件时使用。常规函数和class组件不接收ref参数，且props中也不存在ref */
+      const FancyButton = React.forwardRef((props, ref) => (
+        /* React 传递 ref 给 forwardRef 内函数 (props, ref) => ...，作为其第二个参数。
+         */
+        /* FancyButton 使用 React.forwardRef 来获取传递给它的 ref，然后转发到它渲染的 DOM button */
+        /* 向下转发该 ref 参数到 <button ref={ref}>，将其指定为 JSX 属性。 */
+        <button ref={ref} className="FancyButton">
+          /{props.children}
+        </button>
+        /* 当 ref 挂载完成，ref.current 将指向 <button> DOM 节点。 */
+      ));
+      // 你可以直接获取 DOM button 的 ref：
+      const ref = React.createRef();
+      /* 通过调用React.createRef创建了一个React ref将其赋值为ref变量 */
+      <FancyButton ref={ref}>Click me!</FancyButton>;
+      /* 指定 ref 为 JSX 属性，将其向下传递给 <FancyButton ref={ref} */
+    </script>
+    <script type="text/babel">
+      /* 在高阶组件中转发refs */
+      /* “logProps” HOC 透传（pass through）所有 props 到其包裹的组件，所以渲染结果将是相同的。 */
+      /* refs将不会被透传下去。ref不是prop属性。如果对 HOC 添加 ref，该 ref 将引用最外层的容器组件，而不是被包裹的组件。 */
+      function logProps(WrappedComponent) {
+        class LogProps extends React.Component {
+          componentDidUpdate(prevProps) {
+            console.log("old props:", prevProps);
+            console.log("new props:", this.props);
+          }
+          render() {
+            return <WrappedComponent {...this.props} />;
+          }
+        }
+        return LogProps;
+      }
+    </script>
+    <script type="text/babel">
+      /* 可以使用 React.forwardRef API 明确地将 refs 转发到内部的 FancyButton 组件。React.forwardRef 接受一个渲染函数，其接收 props 和 ref 参数并返回一个 React 节点。 */
+      function logProps(Component) {
+        class LogProps extends React.Component {
+          componentDidUpdate(prevProps) {
+            console.log("old props:", prevProps);
+            console.log("new props:", this.props);
+          }
+
+          render() {
+            const { forwardedRef, ...rest } = this.props;
+
+            // 将自定义的 prop 属性 “forwardedRef” 定义为 ref
+            return <Component ref={forwardedRef} {...rest} />;
+          }
+        }
+
+        // 注意 React.forwardRef 回调的第二个参数 “ref”。
+        // 我们可以将其作为常规 prop 属性传递给 LogProps，例如 “forwardedRef”
+        // 然后它就可以被挂载到被 LogProps 包裹的子组件上。
+        return React.forwardRef((props, ref) => {
+          return <LogProps {...props} forwardedRef={ref} />;
+        });
+      }
+    </script>
+  </body>
+</html>

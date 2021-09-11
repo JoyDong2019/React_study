@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      /* 懒加载 */
+      import React, { Suspense } from "react";
+
+      const OtherComponent = React.lazy(() => import("./OtherComponent"));
+      const AnotherComponent = React.lazy(() => import("./AnotherComponent"));
+
+      function MyComponent() {
+        return (
+          /* 应该在Suspense组件中渲染lazy组件 */
+          /* fallback属性接受任何在组件加载过程中想要展示的react元素 */
+          <div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <section>
+                <OtherComponent />
+                <AnotherComponent />
+              </section>
+            </Suspense>
+          </div>
+        );
+      }
+    </script>
+    <!-- 异常捕获边界 -->
+    <!-- 当模块加载失败时会触发一个错误 可以通过捕获异常边界来处理 -->
+    <script type="text/babel">
+      import React, { Suspense } from "react";
+      import MyErrorBoundary from "./MyErrorBoundary";
+
+      const OtherComponent = React.lazy(() => import("./OtherComponent"));
+      const AnotherComponent = React.lazy(() => import("./AnotherComponent"));
+
+      const MyComponent = () => (
+        /* 利用Errorboundaries处理模块加载失败问题 */
+        <div>
+          <MyErrorBoundary>
+            <Suspense fallback={<div>Loading...</div>}>
+              <section>
+                <OtherComponent />
+                <AnotherComponent />
+              </section>
+            </Suspense>
+          </MyErrorBoundary>
+        </div>
+      );
+    </script>
+    <!-- 基于路由的代码分割 -->
+    <script type="text/babel">
+      import React, { Suspense, lazy } from "react";
+      import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+      const Home = lazy(() => import("./routes/Home"));
+      const About = lazy(() => import("./routes/About"));
+
+      const App = () => (
+        <Router>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/about" component={About} />
+            </Switch>
+          </Suspense>
+        </Router>
+      );
+    </script>
+  </body>
+</html>

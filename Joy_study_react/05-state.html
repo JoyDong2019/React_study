@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      function Clock(props) {
+        return (
+          <div>
+            <h1>Hello, world!</h1>
+            <h2>It is {props.date.toLocaleTimeString()}.</h2>
+          </div>
+        );
+      }
+      function tick() {
+        ReactDOM.render(
+          <Clock date={new Date()} />,
+          /* Clock组件需要一个计时器并需要每秒更新UI */
+          /* <Clock/> */
+          /* 希望只编写一次代码 便可以让Clock组件自我更新*/
+          document.getElementById("root")
+        );
+      }
+      setInterval(tick, 1000);
+    </script>
+    <!-- State与props类似，但是State是私有的，并且完全受控于当前组件 -->
+    <script>
+      class Clock extends React.Component {
+        constructor(props) {
+          super(props);
+          /* 通过与用户的交互，实现不同的状态，然后去渲染UI，这样就让用户的数据和界面保持一致了。state是组件的私有属性 */
+          this.state = { date: new Date() };
+        }
+        render() {
+          return (
+            <div>
+              <h1>Hello, world!</h1>
+              <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+            </div>
+          );
+        }
+      }
+      ReactDOM.render(<Clock />, document.getElementById("root"));
+    </script>
+    <!-- state状态 -->
+    <!-- 
+      state 只能在本组件中去初始化，并且 state 只能被本组件去修改和仿问，不能被外部仿问和修改，所以也可以说，state 是组件私有的。
+      state的使用方法：
+      1、初始化state
+      constructor(props){
+        super(props);
+        this.state={
+          key:value,
+          ...
+        }
+      }
+      2、更新state
+      this.setState({
+        key:value
+      })
+      调用setState()方法后，就会调用render方法，即用户的界面会随着状态的改变而改变。
+      3、调用diff算法
+     -->
+  </body>
+</html>

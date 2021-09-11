@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      /* 在 HTML 中，表单元素（如<input>、 <textarea> 和 <select>）之类的表单元素通常自己维护 state，并根据用户输入进行更新。而在 React 中，可变状态（mutable state）通常保存在组件的 state 属性中，并且只能通过使用 setState()来更新。
+      渲染表单的 React 组件还控制着用户输入过程中表单发生的操作。被 React 以这种方式控制取值的表单输入元素就叫做“受控组件”。
+      */
+      /* 将表单写为受控组件 */
+      class NameForm extends React.Component {
+        constructor(props) {
+          super(props);
+          /* 在表单元素上设置了value属性，因此显示的值将始终为this.state.value React的state成为唯一的数据源 */
+          this.state = { value: "" };
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+        handleChange(event) {
+          this.setState({ value: event.target.value });
+        }
+        handleSubmit(event) {
+          alert("提交的名字: " + this.state.value);
+          event.preventDefault();
+        }
+        render() {
+          return (
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                名字:
+                <input
+                  type="text"
+                  value={this.state.value}
+                  onChange={this.handleChange}
+                />
+              </label>
+              <input type="submit" value="提交" />
+            </form>
+          );
+        }
+      }
+    </script>
+    <!-- textarea标签 -->
+    <script type="text/babel">
+      class EssayForm extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            value: "请撰写一篇关于你喜欢的 DOM 元素的文章.",
+          };
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+        handleChange(event) {
+          this.setState({ value: event.target.value });
+        }
+        handleSubmit(event) {
+          alert("提交的文章: " + this.state.value);
+          event.preventDefault();
+        }
+        render() {
+          return (
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                文章:
+                <textarea
+                  value={this.state.value}
+                  /* this.state.value 初始化于构造函数中 因此文本区域默认有初值 */
+                  onChange={this.handleChange}
+                />
+              </label>
+              <input type="submit" value="提交" />
+            </form>
+          );
+        }
+      }
+    </script>
+    <script type="text/babel">
+      class FlavorForm extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = { value: "coconut" };
+
+          this.handleChange = this.handleChange.bind(this);
+          this.handleSubmit = this.handleSubmit.bind(this);
+        }
+
+        handleChange(event) {
+          this.setState({ value: event.target.value });
+        }
+
+        handleSubmit(event) {
+          alert("你喜欢的风味是: " + this.state.value);
+          event.preventDefault();
+        }
+
+        render() {
+          return (
+            /* 在根 select 标签上使用 value 属性 */
+            <form onSubmit={this.handleSubmit}>
+              <label>
+                选择你喜欢的风味:
+                <select value={this.state.value} onChange={this.handleChange}>
+                  <option value="grapefruit">葡萄柚</option>
+                  <option value="lime">酸橙</option>
+                  <option value="coconut">椰子</option>
+                  <option value="mango">芒果</option>
+                </select>
+              </label>
+              <input type="submit" value="提交" />
+            </form>
+            /* 
+            <select>
+              <option value="grapefruit">葡萄柚</option>
+              由于selected属性，椰子选项默认被选中
+              <option value="lime">酸橙</option>
+              <option selected value="coconut">椰子</option>
+              <option value="mango">芒果</option>
+            </select>
+             */
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

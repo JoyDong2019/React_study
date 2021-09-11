@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
+    <meta charset="UTF-8" />
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      /* Fragments允许你将子列表分组，而无需向DOM添加额外节点 */
+      class Columns extends React.Component {
+        render() {
+          return (
+            <React.Fragment>
+              <td>Hello</td>
+              <td>World</td>
+            </React.Fragment>
+          );
+        }
+      }
+      /* 短语法 */
+      /* return (
+        <>
+          <td>Hello</td>
+          <td>World</td>
+        </>
+      ); */
+      /* 带key的Fragments */
+      /* function Glossary(props) {
+        return (
+          <dl>
+            {props.items.map((item) => (
+              // 没有`key`，React 会发出一个关键警告
+              <React.Fragment key={item.id}>
+                <dt>{item.term}</dt>
+                <dd>{item.description}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        );
+      } */
+    </script>
+  </body>
+</html>

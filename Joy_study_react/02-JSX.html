@@ -3,11 +3,18 @@
   <head>
     <!-- React并没有将标记与逻辑进行分离到不同的文件中 -->
     <meta charset="UTF-8" />
-    <script src="../build/react.development.js"></script>
-    <script src="../build/react-dom.development.js"></script>
-    <script src="../build/babel.min.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@16/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   </head>
   <body>
+    <div id="root"></div>
     <script type="text/babel">
       const name = "Josh Perez";
       const element = <h1>hello,{name}</h1>;
@@ -27,12 +34,20 @@
         if (user) {
           return <h1>Hello,{formatName(user)}!</h1>;
           /* JSX也是一个表达式 */
+          /* 仅使用引号或大括号中的一个，对于同一属性不能同时使用这两种符号 */
         } else {
           return <h1>hello,Stranger</h1>;
         }
       }
       const element = <h1>Hello, {formatName(user)}!</h1>;
       ReactDOM.render(element, document.getElementById("root"));
+    </script>
+    <!-- JSX防止注入攻击 -->
+    <script type="text/babel">
+      const title = response.potentiallyMaliciousInput;
+      // 直接使用是安全的：
+      const element = <h1>{title}</h1>;
+      /* React DOM 在渲染所有输入内容之前，默认会进行转义 所有的内容在渲染之前都被转换成了字符串，可以有效防止XSS攻击。 */
     </script>
     <!-- JSX表示对象 -->
     <script type="text/babel">
